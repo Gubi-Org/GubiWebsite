@@ -1,145 +1,93 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Events | GubiEC</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:#060b14;--bg2:#0c1526;--gold:#f5c12e;--orange:#ff6b1a;
-      --cyan:#00e5ff;--purple:#b589ff;--green:#3ddc84;
-      --text:#e8eaf0;--muted:#7a8ba0;--card:#0f1d30;
-      --border:rgba(61,220,132,.18);--glow:rgba(61,220,132,.35);
-    }
-    html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow-x:hidden}
-    #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 5%;background:rgba(6,11,20,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(61,220,132,.15);gap:20px}
-    .nav-logo{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:var(--gold);letter-spacing:.12em;text-shadow:0 0 18px rgba(245,193,46,.35);text-decoration:none}
-    .nav-links{display:flex;gap:4px;list-style:none}
-    .nav-links li a{text-decoration:none;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 13px;border-radius:6px;transition:color .2s,background .2s;display:block}
-    .nav-links li a:hover{color:var(--text);background:rgba(255,255,255,.06)}
-    .nav-links li a.nav-active{color:var(--green);background:rgba(61,220,132,.1)}
-
-    section{position:relative;z-index:1;padding:100px 5%}
-    .section-label{font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
-    .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);letter-spacing:.04em;line-height:1;color:#fff}
-    .section-title span{color:var(--green)}
-    .glow-line{height:2px;width:60px;background:linear-gradient(90deg,var(--green),transparent);margin:12px 0 0}
-
-    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-    .anim-1{animation:fadeUp .6s .05s ease both}.anim-2{animation:fadeUp .6s .15s ease both}
-    .anim-3{animation:fadeUp .6s .25s ease both}.anim-4{animation:fadeUp .6s .35s ease both}
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity .55s ease,transform .55s ease}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-
-    .sub-hero{position:relative;z-index:1;padding:140px 5% 80px;border-bottom:1px solid rgba(61,220,132,.15)}
-    .sub-hero-inner{max-width:720px}
-    .back-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid rgba(61,220,132,.25);border-radius:6px;color:var(--muted);cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;margin-bottom:32px;text-decoration:none;transition:color .2s,border-color .2s}
-    .back-btn:hover{color:var(--text);border-color:var(--text)}
-    .sub-hero-emoji{font-size:3.4rem;margin-bottom:16px}
-    .sub-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6.5rem);letter-spacing:.04em;line-height:.95;color:var(--green)}
-    .sub-hero-since{font-family:'Orbitron',sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:12px}
-    .sub-hero-desc{color:var(--muted);font-size:1.05rem;line-height:1.65;margin-top:18px;max-width:520px}
-
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:44px}
-    .info-card{background:var(--card);border:1px solid rgba(61,220,132,.15);border-radius:10px;padding:24px 26px;transition:transform .2s,border-color .2s}
-    .info-card:hover{transform:translateY(-4px);border-color:var(--green)}
-    .info-card-icon{font-size:1.8rem;margin-bottom:12px}
-    .info-card-title{font-weight:700;font-size:1rem;color:#fff;margin-bottom:6px}
-    .info-card-desc{color:var(--muted);font-size:.9rem;line-height:1.55}
-
-    .placeholder-banner{background:var(--card);border:1px dashed rgba(61,220,132,.2);border-radius:10px;padding:40px;text-align:center;color:var(--muted);margin-top:44px}
-    .placeholder-banner .ph-icon{font-size:2.4rem;margin-bottom:12px}
-
-    footer{position:relative;z-index:1;border-top:1px solid rgba(61,220,132,.15);padding:32px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-    .footer-logo{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:900;color:var(--gold);letter-spacing:.1em}
-    .footer-copy{color:var(--muted);font-size:.8rem}
-
-    @media(max-width:520px){.nl-label{display:none}}
-
-    .links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:52px}
-    .link-card{background:var(--card);border:1px solid rgba(61,220,132,.15);border-radius:12px;padding:28px 24px;text-decoration:none;display:block;transition:transform .22s,box-shadow .22s,border-color .22s;position:relative;overflow:hidden}
-    .link-card:hover{transform:translateY(-5px)}
-    .lc-discord:hover{border-color:#5865f2;box-shadow:0 14px 40px rgba(88,101,242,.18)}
-    .lc-old:hover{border-color:var(--cyan);box-shadow:0 14px 40px rgba(0,229,255,.12)}
-    .lc-icon{font-size:2rem;margin-bottom:12px}
-    .lc-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;color:#fff;margin-bottom:6px}
-    .lc-desc{color:var(--muted);font-size:.88rem;line-height:1.5}
-    .lc-arrow{margin-top:16px;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
-    .link-card:hover .lc-arrow{color:var(--text)}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events | Gubi-Clan</title>
+  <meta name="description" content="Was der Gubi-Clan sonst noch zusammen macht — abseits von Brawl Stars und Clash Royale." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%233b3a36'/%3E%3Crect x='6' y='2' width='4' height='4' fill='%234fd1c5'/%3E%3Crect x='6' y='10' width='4' height='4' fill='%235fa829'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-<canvas id="stars"></canvas>
+<body data-page="events">
 
-<nav>
-  <a href="index.html" class="nav-logo">GUБIEC</a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="brawlstars.html">🌟 <span class="nl-label">Brawl Stars</span></a></li>
-    <li><a href="clashroyale.html">👑 <span class="nl-label">Clash Royale</span></a></li>
-    <li><a href="events.html" class="nav-active">🎉 <span class="nl-label">Events</span></a></li>
-  </ul>
-</nav>
+<header class="hotbar-wrap">
+  <nav class="hotbar" aria-label="Hauptnavigation">
+    <a class="slot bevel" href="index.html" data-nav="home"><i class="slot__icon slot__icon--home"></i><span>Home</span></a>
+    <a class="slot bevel" href="index.html#server" data-nav="server"><i class="slot__icon slot__icon--server"></i><span>Server</span></a>
+    <a class="slot bevel" href="index.html#clan" data-nav="clan"><i class="slot__icon slot__icon--clan"></i><span>Clan</span></a>
+    <a class="slot bevel" href="brawlstars.html" data-nav="brawlstars"><i class="slot__icon slot__icon--bs"></i><span>Brawl Stars</span></a>
+    <a class="slot bevel" href="clashroyale.html" data-nav="clashroyale"><i class="slot__icon slot__icon--cr"></i><span>Clash Royale</span></a>
+    <a class="slot bevel" href="events.html" data-nav="events"><i class="slot__icon slot__icon--events"></i><span>Events</span></a>
+  </nav>
+</header>
 
-<section class="sub-hero">
-  <div class="sub-hero-inner">
-    <a href="index.html" class="back-btn anim-1">← Zurück zur Startseite</a>
-    <div class="sub-hero-emoji anim-1">🎉</div>
-    <h1 class="anim-2">ANDERE<br>EVENTS</h1>
-    <p class="sub-hero-since anim-3">Community · GubiEC</p>
-    <p class="sub-hero-desc anim-4">Was wir sonst noch so zusammen machen — abseits von Brawl Stars und Clash Royale.</p>
-  </div>
-</section>
-
-<section style="background:var(--bg2)">
-  <div class="section-label">Community</div>
-  <div class="section-title">Unsere <span>Events</span></div>
-  <div class="glow-line"></div>
-  <div class="info-grid reveal">
-    <div class="info-card"><div class="info-card-icon">🎮</div><div class="info-card-title">Andere Games</div><div class="info-card-desc">Ab und zu spielen wir auch andere Spiele zusammen — alles, was gerade Spaß macht.</div></div>
-    <div class="info-card"><div class="info-card-icon">🏅</div><div class="info-card-title">Clan-Challenges</div><div class="info-card-desc">Interne Herausforderungen und kleine Turniere unter Clan-Mitgliedern.</div></div>
-    <div class="info-card"><div class="info-card-icon">💬</div><div class="info-card-title">Community</div><div class="info-card-desc">Abseits der Games — Infos, Updates und alles, was den Clan zusammenhält.</div></div>
-  </div>
-  <div class="placeholder-banner reveal" style="display:none"></div>
-
-  <section style="background:var(--bg)">
-    <div class="section-label">Links</div>
-    <div class="section-title">Schnell<span>links</span></div>
-    <div class="glow-line"></div>
-    <div class="links-grid reveal">
-      <a href="https://discord.com/invite/VcQHzfwfUk" target="_blank" class="link-card lc-discord">
-        <div class="lc-icon">💬</div>
-        <div class="lc-title">Discord Server</div>
-        <div class="lc-desc">Tritt unserem Discord bei — Events werden hier angekündigt.</div>
-        <div class="lc-arrow">Beitreten →</div>
-      </a>
-      <a href="https://gubicr.carrd.co/" target="_blank" class="link-card lc-old">
-        <div class="lc-icon">🗂️</div>
-        <div class="lc-title">Alte Website</div>
-        <div class="lc-desc">Die ursprüngliche GubiEC Seite auf Carrd.</div>
-        <div class="lc-arrow">Besuchen →</div>
-      </a>
+<main>
+  <section class="zone zone--1 page-hero">
+    <div class="container">
+      <a href="index.html" class="page-hero__back bevel panel">Zurück zur Startseite</a>
+      <h1>Andere Events</h1>
+      <span class="page-hero__since">Community · GubiEC</span>
+      <p class="page-hero__desc">Was wir sonst noch so zusammen machen — abseits von Brawl Stars und Clash Royale.</p>
     </div>
   </section>
-</section>
 
-<footer>
-  <div class="footer-logo">GUBI · GubiEC</div>
-  <div class="footer-copy">© 2026 GubiEC</div>
+  <section class="zone zone--2">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-kicker">Community</span>
+        <h2 class="section-title">Unsere Events</h2>
+      </div>
+      <div class="cards">
+        <div class="card bevel">
+          <svg class="card__icon" viewBox="0 0 10 10" aria-hidden="true"><rect x="1" y="4" width="8" height="3" fill="currentColor"/><rect x="0" y="5" width="1" height="1" fill="currentColor"/><rect x="9" y="5" width="1" height="1" fill="currentColor"/><rect x="2" y="5" width="1" height="1" fill="var(--void)"/><rect x="7" y="5" width="1" height="1" fill="var(--void)"/></svg>
+          <h3>Andere Games</h3>
+          <p>Ab und zu spielen wir auch andere Spiele zusammen — alles, was gerade Spaß macht.</p>
+        </div>
+        <div class="card bevel">
+          <svg class="card__icon" viewBox="0 0 10 10" aria-hidden="true"><rect x="3" y="0" width="4" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="2" fill="currentColor"/><rect x="2" y="6" width="6" height="1" fill="currentColor"/><rect x="3" y="7" width="4" height="1" fill="currentColor"/></svg>
+          <h3>Clan-Challenges</h3>
+          <p>Interne Herausforderungen und kleine Turniere unter Clan-Mitgliedern.</p>
+        </div>
+        <div class="card bevel">
+          <svg class="card__icon" viewBox="0 0 10 10" aria-hidden="true"><rect x="0" y="1" width="8" height="5" fill="currentColor"/><rect x="1" y="7" width="2" height="2" fill="currentColor"/><rect x="2" y="3" width="1" height="1" fill="var(--void)"/><rect x="4" y="3" width="1" height="1" fill="var(--void)"/><rect x="6" y="3" width="1" height="1" fill="var(--void)"/></svg>
+          <h3>Community</h3>
+          <p>Abseits der Games — Infos, Updates und alles, was den Clan zusammenhält.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="zone zone--3">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">Schnelllinks</h2>
+      </div>
+      <div class="cards">
+        <a href="https://discord.com/invite/VcQHzfwfUk" target="_blank" rel="noopener" class="card card--link bevel">
+          <h3>Discord Server</h3>
+          <p>Tritt unserem Discord bei — Events werden hier angekündigt.</p>
+          <span class="card__cta">Beitreten</span>
+        </a>
+        <a href="https://gubicr.carrd.co/" target="_blank" rel="noopener" class="card card--link bevel">
+          <h3>Alte Website</h3>
+          <p>Die ursprüngliche GubiEC-Seite auf Carrd.</p>
+          <span class="card__cta">Besuchen</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="zone zone--5 site-footer">
+  <div class="container site-footer__inner">
+    <a href="https://discord.com/invite/VcQHzfwfUk" target="_blank" rel="noopener" class="btn bevel btn--secondary">Discord</a>
+    <p>© 2026 GubiEC</p>
+  </div>
 </footer>
 
-<script>
-  const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
-  function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}resize();window.addEventListener('resize',resize);
-  for(let i=0;i<160;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+.2,a:Math.random(),s:Math.random()*.0003+.00008});
-  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.a+=s.s;ctx.beginPath();ctx.arc(s.x*canvas.width,s.y*canvas.height,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(61,220,132,${(.25+.6*Math.abs(Math.sin(s.a)))*.4})`;ctx.fill();});requestAnimationFrame(draw);}draw();
-  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:.1});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-</script>
+<script src="script.js" defer></script>
 </body>
 </html>
